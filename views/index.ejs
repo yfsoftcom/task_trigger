@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Task Schedule Admin</title>
+        <meta charset="UTF-8"/>
+        <link rel='stylesheet' href='/stylesheets/style.css'/>
+        <link href="//cdn.bootcss.com/flat-ui/2.3.0/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="//cdn.bootcss.com/flat-ui/2.3.0/css/flat-ui.min.css" rel="stylesheet">
+        <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    </head>
+    <body ng-app="task-app">
+    <h1>Task Schedule Platform</h1>
+
+    <p>Gr100 task schedule platform admin</p>
+
+    <div class="panel panel-default" ng-controller="taskCtrl">
+        <div class="panel-heading">
+            <i class="fa fa-list"></i> Events
+            <div class="pull-right">
+                <button class="btn btn-xs btn-primary" ng-click="action('start')"><i class="fa fa-play"></i> StartAll</button>
+                <button class="btn btn-xs btn-danger" ng-click="action('stop')"><i class="fa fa-pause"></i> StopAll</button>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered">
+                <tr>
+                    <th>ID</th>
+                    <th>Job</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Count</th>
+                    <th>LastExecuteTime</th>
+                    <th>FailCount</th>
+                    <th>Cron</th>
+                    <th>Action</th>
+                </tr>
+                <tr ng-repeat="t in tasks">
+                    <td>{{t.id}}</td>
+                    <td>{{t.job}}</td>
+                    <td>{{t.type}}</td>
+                    <td>{{t.status | task_status}}</td>
+                    <td>{{t.count}}</td>
+                    <td>{{t.last_execute_time | date : 'yyyy-MM-dd hh:mm:ss'}}</td>
+                    <td>{{t.fail_count}}</td>
+                    <td>{{t.cron}}</td>
+                    <td>
+                        <button ng-if="t.autorun == 0" class="btn btn-xs btn-primary" ng-click="action('start',$index)"><i class="fa fa-play"></i></button>
+                        <button ng-if="t.autorun == 1" class="btn btn-xs btn-danger" ng-click="action('stop',$index)"><i class="fa fa-pause"></i></button>
+                        <button ng-if="t.status == 99" class="btn btn-xs btn-default" ng-click="reset(t.id)"><i class="fa fa-refresh"></i></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script src="//cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
+    <script src="/javascripts/app.js"></script>
+    </body>
+</html>
