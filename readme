@@ -1,0 +1,19 @@
+### 任务计划调度面板
+
+# 可以方便的查看后台的任务执行状态
+
+运行步骤:
+
+npm install
+
+touch key.js
+
+type
+
+`
+module.exports = {
+mode:'',    //DEV,STAGING,PRODUCT
+appkey:'',  //
+masterKey:''
+}
+`
