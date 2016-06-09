@@ -15,7 +15,8 @@
 
     <div class="panel panel-default" ng-controller="taskCtrl">
         <div class="panel-heading">
-            <i class="fa fa-list"></i> Events
+            <i class="fa fa-list"></i> Events <button class="btn btn-xs btn-warning" ng-click="reload()"><i class="fa fa-refresh"></i> Reload</button>
+            <span class="text-success btn-xs">Last Fresh Time:{{lastRefreshTime | date : 'yyyy-MM-dd hh:mm:ss'}}</span>
             <div class="pull-right">
                 <button class="btn btn-xs btn-primary" ng-click="action('start')"><i class="fa fa-play"></i> StartAll</button>
                 <button class="btn btn-xs btn-danger" ng-click="action('stop')"><i class="fa fa-pause"></i> StopAll</button>
@@ -46,7 +47,7 @@
                     <td>
                         <button ng-if="t.autorun == 0" class="btn btn-xs btn-primary" ng-click="action('start',$index)"><i class="fa fa-play"></i></button>
                         <button ng-if="t.autorun == 1" class="btn btn-xs btn-danger" ng-click="action('stop',$index)"><i class="fa fa-pause"></i></button>
-                        <button ng-if="t.status == 99" class="btn btn-xs btn-default" ng-click="reset(t.id)"><i class="fa fa-refresh"></i></button>
+                        <button ng-if="t.status == 99" class="btn btn-xs btn-default" ng-click="reset(t)"><i class="fa fa-refresh"></i></button>
                     </td>
                 </tr>
             </table>
