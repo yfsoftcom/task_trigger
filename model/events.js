@@ -3,7 +3,6 @@ var schedule = require('node-schedule');
 var Q = require('q');
 var async = require('async');
 var C = require('../config.js');
-//TODO:ÇÐ»»appkey ºÍ masterkey ºÍ mode
 var AE = require('apiengine')(C.ae);
 
 var jobs = undefined;
@@ -18,6 +17,7 @@ var getStatus = function(ids){
     }
     query.find().then(function(list){
         var events = list._d;
+        console.log(events);
         if(jobs){
             for(var i in events){
                 var e = events[i];
@@ -35,8 +35,8 @@ var getStatus = function(ids){
 
 var createJob = function(event){
     return schedule.scheduleJob(event.cron, function(){
-        console.log('run :' + event.id );
-        console.log('run :' + event.job );
+        console.log('run job;ID:' + event.id );
+        console.log('run job;JOB:' + event.job );
         var func = new AE.Function('job.run');
         func.invoke({eventId: event.id});
     });
@@ -85,7 +85,14 @@ var resetEvent = function(_event){
     return modifyer.invoke({table:'api_webevent',condition:'id in ('+_event.id+')',row:{status:1}});
 };
 
+var createEvent = function(_event){
+    var _o = new AE.Object('api_webevent');
+    _o.set(_event);
+    return _o.create();
+}
+
 module.exports = {
+    createEvent:createEvent,
     getStatus:getStatus,
     resetJobs:resetJobs,
     startJob:startJob,

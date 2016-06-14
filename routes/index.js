@@ -30,6 +30,21 @@ router.get('/jobs', function(req, res) {
     res.status(500).error(err);
   });
 });
+
+router.post('/create', function(req, res) {
+  var _e = req.body;
+  _e.status = 1;
+  eventsM.createEvent(_e).then(function(data){
+    var e = data._d;
+    res.json(e);
+    events[e.id] = e;
+    eventsM.startJob(e);
+  }).catch(function(err){
+    res.status(500).error(err);
+  });
+});
+
+
 router.get('/start/:ids', function(req, res) {
   var ids = req.params.ids;
   var ids = ids.split(',');

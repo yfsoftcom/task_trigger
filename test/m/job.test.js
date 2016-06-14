@@ -3,6 +3,20 @@ var expect = require('chai').expect;
 var eventM = require('../../model/events.js');
 var events = undefined;
 describe('JOB', function() {
+
+    describe('#createEvent()', function () {
+        it('createEvent return new event', function (done) {
+            eventM.createEvent({type:'web',job:'http://www.baidu.com',cron:'* * * * *',autorun:0}).then(function(data){
+                console.log(data);
+                expect(data).to.be.a('object');
+                done();
+            }).catch(function(err){
+                done(err);
+            });
+        });
+    });
+
+    /*
     describe('#getStatus()', function () {
         it('getStatus return 2 events', function (done) {
             eventM.getStatus().then(function(list){
@@ -47,5 +61,5 @@ describe('JOB', function() {
         })
     });
 
-
+    //*/
 });
