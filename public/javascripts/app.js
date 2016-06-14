@@ -11,7 +11,7 @@ taskApp.filter('task_status',function(){
 });
 taskApp.controller('taskCtrl',function(taskFactory,$scope,$interval){
 
-    var timer = $interval(function(){ },5 * 50 * 1000);
+    var timer = $interval(function(){ },5 * 60 * 1000);
     timer.then(function(){
         $scope.reload();
     })
@@ -59,6 +59,19 @@ taskApp.controller('taskCtrl',function(taskFactory,$scope,$interval){
                 console.log(err);
             })
     }
+
+    $scope.event = {};
+    //创建一个新的job event
+    $scope.save = function(){
+        taskFactory.create($scope.event).then(function(data){
+            $scope.tasks.push(data);
+        }) .catch(function(err){
+            alert(err.message);
+        }).finally(function(){
+            $('#modal-create').modal('hide');
+            $scope.event = {};
+        })
+    }
 });
 
 taskApp.factory('taskFactory',function($http,$q){
@@ -70,6 +83,16 @@ taskApp.factory('taskFactory',function($http,$q){
             }).catch(function(err){
                 q.reject(err);
             })
+            return q.promise;
+        },
+        create:function(event){
+            var q = $q.defer();
+            event.autorun = event.autorun?1:0;
+            $http.post('/create',event).then(function(data){
+                q.resolve(data.data);
+            }).catch(function(err){
+                q.reject(err);
+            });
             return q.promise;
         },
         action:function(action,taskid){
