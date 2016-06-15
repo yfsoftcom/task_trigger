@@ -54,6 +54,16 @@ router.get('/start/:ids', function(req, res) {
   res.json(1);
 });
 
+router.get('/drop/:id', function(req, res) {
+  var id = req.params.id;
+  eventsM.dropEvent({id:id}).then(function(data){
+    delete events[id];
+    res.json(data);
+  }).catch(function(err){
+    res.status(500).error(err);
+  });
+});
+
 router.get('/stop/:ids', function(req, res) {
   var ids = req.params.ids;
   var ids = ids.split(',');

@@ -49,7 +49,7 @@ taskApp.controller('taskCtrl',function(taskFactory,$scope,$interval){
         });
     };
     $scope.reset = function(task){
-        if(!confirm('Are you sure REST the Job?')){
+        if(!confirm('Are you sure RESET the Job?')){
             return;
         }
         taskFactory.reset(task.id).then(function(){
@@ -58,9 +58,23 @@ taskApp.controller('taskCtrl',function(taskFactory,$scope,$interval){
             .catch(function(err){
                 console.log(err);
             })
-    }
+    };
+    //删除job
+    $scope.drop = function(index){
+        if(!confirm('Are you sure DROP the Job?')){
+            return;
+        }
+        var task = $scope.tasks[index];
+        taskFactory.drop(task.id).then(function(){
+            //remove the tasks;
+            $scope.tasks.splice(index,1);
+        })
+            .catch(function(err){
+                console.log(err);
+            })
+    };
 
-    $scope.event = {};
+    $scope.event = {autorun:true};
     //创建一个新的job event
     $scope.save = function(){
         taskFactory.create($scope.event).then(function(data){
@@ -69,7 +83,7 @@ taskApp.controller('taskCtrl',function(taskFactory,$scope,$interval){
             alert(err.message);
         }).finally(function(){
             $('#modal-create').modal('hide');
-            $scope.event = {};
+            $scope.event = {autorun:true};
         })
     }
 });
@@ -89,6 +103,15 @@ taskApp.factory('taskFactory',function($http,$q){
             var q = $q.defer();
             event.autorun = event.autorun?1:0;
             $http.post('/create',event).then(function(data){
+                q.resolve(data.data);
+            }).catch(function(err){
+                q.reject(err);
+            });
+            return q.promise;
+        },
+        drop:function(id){
+            var q = $q.defer();
+            $http.get('/drop/' + id).then(function(data){
                 q.resolve(data.data);
             }).catch(function(err){
                 q.reject(err);
