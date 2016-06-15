@@ -11,10 +11,6 @@ taskApp.filter('task_status',function(){
 });
 taskApp.controller('taskCtrl',function(taskFactory,$scope,$interval){
 
-    var timer = $interval(function(){ },5 * 60 * 1000);
-    timer.then(function(){
-        $scope.reload();
-    })
     $scope.lastRefreshTime = new Date().getTime();
     $scope.reload = function(){
         taskFactory.getTask().then(function(tasks){
@@ -22,7 +18,7 @@ taskApp.controller('taskCtrl',function(taskFactory,$scope,$interval){
             $scope.lastRefreshTime = new Date().getTime();
         });
     };
-
+    var timer = $interval($scope.reload,0.1 * 60 * 1000);
     $scope.reload();
     $scope.action = function(action,index){
         var ids = [];

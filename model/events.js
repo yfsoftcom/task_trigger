@@ -17,7 +17,6 @@ var getStatus = function(ids){
     }
     query.find().then(function(list){
         var events = list._d;
-        console.log(events);
         if(jobs){
             for(var i in events){
                 var e = events[i];
