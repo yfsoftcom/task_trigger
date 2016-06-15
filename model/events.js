@@ -17,7 +17,6 @@ var getStatus = function(ids){
     }
     query.find().then(function(list){
         var events = list._d;
-        console.log(events);
         if(jobs){
             for(var i in events){
                 var e = events[i];
@@ -85,6 +84,16 @@ var resetEvent = function(_event){
     return modifyer.invoke({table:'api_webevent',condition:'id in ('+_event.id+')',row:{status:1}});
 };
 
+var dropEvent = function(_event){
+    var job = jobs[_event.id];
+    if(job){
+        job.cancel();
+        delete jobs[_event.id];
+    }
+    var remover = new AE.Function('api.remove');
+    return remover.invoke({table:'api_webevent',id:_event.id});
+};
+
 var createEvent = function(_event){
     var _o = new AE.Object('api_webevent');
     _o.set(_event);
@@ -97,5 +106,6 @@ module.exports = {
     resetJobs:resetJobs,
     startJob:startJob,
     stopJob:stopJob,
-    resetEvent:resetEvent
+    resetEvent:resetEvent,
+    dropEvent:dropEvent
 };
